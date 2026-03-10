@@ -125,6 +125,37 @@ Core repositories in the current stack:
 - `gemini-recall`
 - `Claude-Codex-Gemini-to-IM`
 
+## Current Status
+
+This repository is currently best understood as an early public release.
+
+What is already in place:
+
+- state-aware install / continue / partial flows
+- a real memory interview that writes the workspace `.assistant/` scaffold
+- Tier 1 IM bridge integration with host-aware setup flow
+- Tier 3 catalog guidance for MCPs and skills
+- automated smoke tests
+- a semi-integration test for the IM bridge install chain
+
+What still benefits from more real-world feedback:
+
+- first-run behavior across more Claude / Codex / Gemini environments
+- provider-specific IM bridge setup in more real machines
+- onboarding clarity and overall setup feel
+- more edge cases around third-party dependencies and permissions
+
+If you want a fully battle-tested release, wait.
+If you are comfortable with an evolving but usable starter, this is ready for early adoption.
+
+## Known Limitations
+
+- Claude Code and Codex are currently the main path; Gemini still needs more real-world validation.
+- IM bridge support is integrated, but different providers and machine setups may still expose rough edges.
+- MCPs and skills are intentionally Tier 3 catalog entries for now; this repository does not fully lifecycle-manage them.
+- Real third-party dependency installs can still vary by machine, network, and local CLI state.
+- This repository improves continuity and setup structure, but it does not replace the native host runtime.
+
 ## Quick Start
 
 ```bash

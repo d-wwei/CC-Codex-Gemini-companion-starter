@@ -130,6 +130,37 @@ Claude Code / Codex 这类宿主则更像强大的白板底座：
 - `gemini-recall`
 - `Claude-Codex-Gemini-to-IM`
 
+## 当前状态
+
+这个仓库目前更适合被理解为一个 early public release，而不是完全成熟版。
+
+已经完成的部分：
+
+- 状态感知安装流程：`install / continue / partial`
+- 一个真正会写入 `.assistant/` 的 memory interview
+- Tier 1 官方 IM bridge 接入流程
+- Tier 3 MCP / skills catalog 引导
+- 自动化 smoke tests
+- 一条针对 IM bridge 安装链路的半集成测试
+
+仍然需要更多真实环境反馈的部分：
+
+- 更多 Claude / Codex / Gemini 实机环境下的首次安装表现
+- 更多 IM provider 在真实机器上的配置体验
+- onboarding 话术和整体体验是否足够顺
+- 第三方依赖、权限和本地环境差异带来的边角问题
+
+如果你要的是完全 battle-tested 的成熟版本，可以再等等。
+如果你能接受一个已经可用、但仍在快速迭代的 starter，现在就可以开始试用。
+
+## 已知限制
+
+- 当前主路径依然是 Claude Code 和 Codex；Gemini 还需要更多真实环境验证。
+- IM bridge 已经接入，但不同 provider、不同机器环境下仍可能有边角问题。
+- MCP 和 skills 当前有意保持在 Tier 3 catalog-only，不由这个仓库完整托管生命周期。
+- 第三方依赖的真实安装效果仍会受到本地网络、CLI 状态和机器环境影响。
+- 这个仓库增强的是宿主的连续协作能力和初始化体验，不替代宿主本身的原生 runtime。
+
 本仓库负责：
 
 - 统一安装入口
