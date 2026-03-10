@@ -8,3 +8,5 @@ dist/
 *.log
 *.tmp
 *.bak
+
+RELEASE_CHECKLIST.md

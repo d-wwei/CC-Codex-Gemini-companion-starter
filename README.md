@@ -145,6 +145,14 @@ bin/cccg-companion im status --workspace /path/to/workspace
 bin/cccg-companion im logs --workspace /path/to/workspace 100
 ```
 
+## Test Commands
+
+```bash
+bash scripts/test/run-smoke-tests.sh
+bash scripts/test/test-im-install-chain.sh
+bash scripts/test/run-all-tests.sh
+```
+
 ## User Flow
 
 1. Run install for the target host.

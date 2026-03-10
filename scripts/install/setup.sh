@@ -108,6 +108,7 @@ echo "  $(state_dir "$WORKSPACE")/platform-next-steps.md"
 if [[ "${INTERVIEW_STATUS}" == "completed" ]]; then
   echo "Memory interview already marked as completed."
 else
+  save_state "$WORKSPACE"
   "$ROOT_DIR/scripts/memory/interview.sh" --workspace "$WORKSPACE" --platform "$PLATFORM_ARG"
   load_state "$WORKSPACE"
 fi

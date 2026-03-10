@@ -166,6 +166,14 @@ bin/cccg-companion im status --workspace /path/to/workspace
 bin/cccg-companion im logs --workspace /path/to/workspace 100
 ```
 
+## 测试命令
+
+```bash
+bash scripts/test/run-smoke-tests.sh
+bash scripts/test/test-im-install-chain.sh
+bash scripts/test/run-all-tests.sh
+```
+
 ## 用户路径
 
 1. 运行安装命令并选择目标宿主。
