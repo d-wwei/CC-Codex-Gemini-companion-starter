@@ -1,60 +1,139 @@
 # CC-Codex-Gemini Companion Starter
 
-Single-repository bootstrap framework for Claude Code, Codex, and Gemini.
+Turn Claude Code / Codex / Gemini from capable CLI agents into better long-term personal assistants.
 
 [中文说明](./README.zh-CN.md)
 
-This repository does not replace the three existing memory repositories. It orchestrates them and adds:
+## Why This Repository Exists
 
-- state-aware installation
-- open source consent gating
-- Tier 1 official IM bridge setup
-- Tier 3 MCP catalog guidance
-- Tier 3 skills catalog guidance
-- doctor, reconfigure, and reset entry points
+What many people actually like about OpenClaw is not a single feature. It is the feeling of a long-term assistant:
 
-## Support Tiers
+- reachable from IM
+- able to remember context
+- able to use tools and move work forward
 
-- Tier 1: `claude-recall`, `codex-recall`, `gemini-recall`, `Claude-Codex-Gemini-to-IM`
-- Tier 2: currently empty
-- Tier 3: all external MCPs and skills are catalog-only
+But if you want to place that kind of system into a real workflow, safety, stability, boundaries, and control quickly matter more than novelty.
 
-See `docs/tiers.md` for the exact boundary.
+This repository is not about cloning OpenClaw.  
+It is about migrating the most valuable parts of that experience onto more mature hosts:
+
+- Claude Code
+- Codex
+- Gemini
+
+In practice, Claude Code and Codex are usually the main path.
+
+## The Three-Part Upgrade
+
+This is not a single prompt and not just a memory patch.
+
+It is a three-part upgrade:
+
+1. Memory
+2. IM bridge
+3. Tooling layer
+
+### 1. Memory
+
+Claude Code / Codex / Gemini are strong by default, but still tend to behave like single-session agents.
+
+This starter adds a more durable collaboration layer with:
+
+- global memory
+- project memory
+- temporary daily context
+- runtime state and resume checkpoints
+
+The design is inspired by OpenClaw-style durable memory, but rebuilt for Claude Code / Codex / Gemini workflows instead of copied directly.
+
+### 2. IM Bridge
+
+A real assistant should be easy to reach.
+
+This repository integrates IM bridge setup so the host can be reached from real communication surfaces, especially Feishu / Lark style workflows.
+
+The goal is not just “message delivery works”, but a smoother day-to-day assistant experience:
+
+- easier entry point
+- better session continuity
+- fewer rough edges around attachments, voice, and background runtime
+- isolation across multiple hosts on one machine
+
+Core integration:
+
+- [`Claude-Codex-Gemini-to-IM`](https://github.com/d-wwei/Claude-Codex-Gemini-to-IM)
+
+With thanks to the upstream open source bridge work:
+
+- [`op7418/Claude-to-IM-skill`](https://github.com/op7418/Claude-to-IM-skill)
+
+### 3. Tooling Layer
+
+One major OpenClaw advantage is that it feels like it ships with an assistant-shaped tool layer out of the box.
+
+Claude Code / Codex are different: they are powerful hosts, but closer to a blank canvas at the assistant-tooling layer.
+
+So this repository does not just add “more MCPs”. It helps restore a practical default tool layer for long-term assistant work:
+
+- browser and web handling
+- search and discovery
+- memory and reasoning support
+- common infrastructure integrations such as GitHub and Feishu
+- optional domain-specific tools
+
+More importantly, those tools stay inside a host where the process is easier to inspect and control:
+
+- what was read
+- what was changed
+- which tools were called
+- which steps were executed
+
+The goal is not only “can act”, but “can act with better control”.
+
+## Why Claude Code / Codex
+
+The point is not that OpenClaw cannot be modified.
+
+The point is that Claude Code / Codex are already stronger long-term hosts for many real workflows:
+
+- more mature and stable as daily-use hosts
+- already strong at reading repos, editing files, running commands, and handling context
+- still actively evolving
+- richer subscription / provider options
+- stronger surrounding ecosystem for skills, MCPs, and integrations
+
+This repository tries to move the valuable experience layer onto a host you may actually want to trust long-term.
 
 ## Repository Role
 
-This is the integration layer.
+This is an integration-layer repository, not a new memory core.
 
-- `claude-recall`, `codex-recall`, and `gemini-recall` remain the memory source of truth
-- this repository manages onboarding and optional component setup
+It orchestrates:
 
-## What It Gives You
+- unified install entry
+- state-aware setup
+- open source disclaimer confirmation
+- memory onboarding
+- IM bridge setup/control entry points
+- MCP / skills catalog guidance
+- `install / reconfigure / doctor / reset`
 
-- A single install entry for Claude Code, Codex, and Gemini
-- A real memory interview that writes the workspace `.assistant/` scaffold
-- A Tier 1 adapter for `Claude-Codex-Gemini-to-IM`
-- A curated Tier 3 catalog for external MCPs and skills
-- State-aware `install`, `reconfigure`, `doctor`, and `reset` flows
+Core repositories in the current stack:
 
-## User Flow
-
-1. Run the installer for the target platform.
-2. If prior setup is detected, choose `fresh`, `continue`, or `partial`.
-3. Accept the open source disclaimer.
-4. Complete the memory interview.
-5. Configure the official IM bridge now or skip it for later.
-6. Review MCP and skills catalogs and mark them as self-managed if desired.
-7. Re-enter later through `reconfigure` or `im ...` commands.
+- `claude-recall`
+- `codex-recall`
+- `gemini-recall`
+- `Claude-Codex-Gemini-to-IM`
 
 ## Quick Start
 
 ```bash
 cd CC-Codex-Gemini-companion-starter
 chmod +x bin/cccg-companion scripts/install/setup.sh scripts/reconfigure/setup.sh scripts/doctor/check.sh scripts/reset/reset.sh scripts/im/setup.sh scripts/im/control.sh scripts/memory/interview.sh
-bin/cccg-companion install --workspace /path/to/target-workspace --platform codex
+bin/cccg-companion install --workspace /path/to/target-workspace --platform claude
 ```
 
-## Commands
+Example commands:
 
 ```bash
 bin/cccg-companion install --workspace /path/to/workspace --platform claude
@@ -66,19 +145,19 @@ bin/cccg-companion im status --workspace /path/to/workspace
 bin/cccg-companion im logs --workspace /path/to/workspace 100
 ```
 
-## IM Bridge Commands
+## User Flow
 
-```bash
-bin/cccg-companion im start --workspace /path/to/workspace
-bin/cccg-companion im stop --workspace /path/to/workspace
-bin/cccg-companion im status --workspace /path/to/workspace
-bin/cccg-companion im logs --workspace /path/to/workspace 100
-bin/cccg-companion im doctor --workspace /path/to/workspace
-```
+1. Run install for the target host.
+2. Choose `fresh`, `continue`, or `partial` if prior state exists.
+3. Read and accept the open source disclaimer.
+4. Complete the memory interview.
+5. Configure IM bridge now or later.
+6. Review MCP / skills catalogs.
+7. Re-enter later through `reconfigure`, `doctor`, or `im ...`.
 
-## What Gets Written
+## State Location
 
-The unified bootstrap state lives at:
+Unified bootstrap state is written under:
 
 ```text
 .assistant/unified-bootstrap/
@@ -93,31 +172,48 @@ Key files:
 - `mcp-plan.md`
 - `skills-plan.md`
 
-## Repository Layout
-
-```text
-bin/
-scripts/
-  install/
-  reconfigure/
-  doctor/
-  reset/
-  im/
-  memory/
-docs/
-catalogs/
-manifests/
-profiles/
-```
-
 ## Documents
 
-- `docs/architecture.md`
 - `docs/tiers.md`
+- `docs/architecture.md`
 - `docs/im/official-bridge.md`
 - `docs/onboarding-flow.md`
 - `docs/disclaimer.md`
 - `catalogs/recommended-mcp-skills.md`
+
+## Install Only One Part
+
+If you only want one part of the stack, you can install the standalone repositories directly instead of starting with the full integration repository.
+
+### Memory Layer
+
+- [claude-recall](https://github.com/d-wwei/claude-recall)
+- [codex-recall](https://github.com/d-wwei/codex-recall)
+- [gemini-recall](https://github.com/d-wwei/gemini-recall)
+
+### IM Bridge
+
+- [Claude-Codex-Gemini-to-IM](https://github.com/d-wwei/Claude-Codex-Gemini-to-IM)
+- Upstream original bridge: [op7418/Claude-to-IM-skill](https://github.com/op7418/Claude-to-IM-skill)
+
+### Starter Tool Pack
+
+- [agent-powerpack](https://github.com/d-wwei/agent-powerpack)
+
+## Open Source Note
+
+This stack is not invented from scratch. It is assembled and adapted from open source projects, official capabilities, and community tooling.
+
+- The IM bridge layer extends existing open source bridge work
+- The memory layer is inspired by OpenClaw-style long-term collaboration ideas, rebuilt for Claude Code / Codex / Gemini workflows
+- Some MCP, skill, and plugin capabilities come from community and official ecosystems
+
+Much of this project was also shaped through fast AI-era vibe coding: rapid iteration, quick testing, and quick restructuring.
+
+The project was built in a relatively short time. It has been self-tested in real usage, but it does not cover every environment, permission model, or workflow edge case.
+
+Issues and feedback are welcome.  
+And if something breaks, Claude Code / Codex can probably help you fix it too.
 
 ## License
 
