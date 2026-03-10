@@ -1,0 +1,6 @@
+id: claude
+name: Claude Code
+memory_source: d-wwei/claude-recall
+global_dir: ~/.claude
+global_entry: CLAUDE.md
+bootstrap_type: prompt_pack

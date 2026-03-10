@@ -1,0 +1,3 @@
+id: mcp
+required: false
+description: Optional installation of curated MCP servers.

@@ -1,0 +1,6 @@
+id: codex
+name: Codex
+memory_source: d-wwei/codex-recall
+global_dir: ~/.codex
+global_entry: AGENTS.md
+bootstrap_type: installable_skill

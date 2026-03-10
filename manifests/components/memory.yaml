@@ -1,0 +1,3 @@
+id: memory
+required: true
+description: Platform-native long-term memory setup powered by the existing memory repositories.

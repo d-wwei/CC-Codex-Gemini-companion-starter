@@ -1,0 +1,5 @@
+Welcome aboard. Your assistant stack is now structured for long-term memory, optional remote access, and tool expansion without collapsing into a monolith.
+
+You can continue with the pending items at any time by running:
+
+  bin/cccg-companion reconfigure --workspace <target-workspace>

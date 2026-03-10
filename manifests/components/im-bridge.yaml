@@ -1,0 +1,9 @@
+id: im-bridge
+required: false
+description: Tier 1 official IM bridge adapter for Claude-Codex-Gemini-to-IM.
+repo: https://github.com/d-wwei/Claude-Codex-Gemini-to-IM
+providers:
+  - telegram
+  - discord
+  - feishu
+tier: 1

@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+if [[ $# -lt 1 ]]; then
+  cat <<'EOF'
+Usage: cccg-companion <install|reconfigure|doctor|reset|im> [args...]
+EOF
+  exit 1
+fi
+
+COMMAND="$1"
+shift
+
+case "$COMMAND" in
+  install)
+    exec "$ROOT_DIR/scripts/install/setup.sh" "$@"
+    ;;
+  reconfigure)
+    exec "$ROOT_DIR/scripts/reconfigure/setup.sh" "$@"
+    ;;
+  doctor)
+    exec "$ROOT_DIR/scripts/doctor/check.sh" "$@"
+    ;;
+  reset)
+    exec "$ROOT_DIR/scripts/reset/reset.sh" "$@"
+    ;;
+  im)
+    exec "$ROOT_DIR/scripts/im/control.sh" "$@"
+    ;;
+  *)
+    echo "Unknown command: $COMMAND" >&2
+    exit 1
+    ;;
+esac

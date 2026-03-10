@@ -1,0 +1,42 @@
+mcp:
+  - name: Feishu official MCP
+    repo: https://github.com/larksuite/lark-openapi-mcp/tree/main
+    requires_key: ""
+    guide: ""
+  - name: GitHub MCP
+    repo: ""
+    requires_key: GITHUB_TOKEN
+    guide: https://github.com/settings/tokens
+  - name: Vercel agent-browser
+    repo: https://github.com/vercel-labs/agent-browser
+    requires_key: ""
+    guide: ""
+  - name: Sequential Thinking
+    repo: https://github.com/modelcontextprotocol/servers
+    requires_key: ""
+    guide: ""
+  - name: OpenMemory (Mem0)
+    repo: https://github.com/mem0ai/mem0-mcp
+    requires_key: ""
+    guide: ""
+  - name: Tavily MCP
+    repo: https://github.com/tavily-ai/tavily-mcp
+    requires_key: TAVILY_API_KEY
+    guide: https://app.tavily.com/home
+  - name: Exa MCP
+    repo: https://github.com/exa-labs/exa-mcp-server
+    requires_key: EXA_API_KEY
+    guide: https://dashboard.exa.ai/api-keys
+  - name: Firecrawl MCP
+    repo: https://github.com/firecrawl/firecrawl-mcp-server
+    requires_key: FIRECRAWL_API_KEY
+    guide: https://www.firecrawl.dev/app/api-keys
+  - name: Jina Reader
+    repo: https://github.com/jina-ai/MCP
+    requires_key: JINA_API_KEY
+    guide: https://jina.ai/
+skills:
+  - name: Anthropic financial-services-plugins
+    repo: https://github.com/anthropics/financial-services-plugins
+    requires_key: ""
+    guide: ""

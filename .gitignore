@@ -1,0 +1,10 @@
+.DS_Store
+node_modules/
+dist/
+
+.assistant/unified-bootstrap/
+.assistant/runtime/
+
+*.log
+*.tmp
+*.bak

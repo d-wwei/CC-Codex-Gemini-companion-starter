@@ -1,0 +1,6 @@
+id: gemini
+name: Gemini CLI
+memory_source: d-wwei/gemini-recall
+global_dir: ~/.gemini
+global_entry: GEMINI.md
+bootstrap_type: prompt_pack
