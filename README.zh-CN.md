@@ -144,6 +144,14 @@ Claude Code / Codex 这类宿主则更像强大的白板底座：
 
 - 状态感知安装流程：`install / continue / partial`
 - 一个真正会写入 `.assistant/` 的 memory interview
+- 一个结构化的 last-session checkpoint，以及默认写入 workflow 的快速回想协议
+- 一个可复用的 resume checkpoint 模板，用于多步骤任务中断和恢复
+- 一个 `active-task.md` 恢复锚点，用于当前进行中的多步骤任务
+- 一个 `interrupted-tasks.md` 清单，用于记录所有中断任务、时间和优先级
+- 一组编号化恢复选项，允许用户直接切换到其他中断任务
+- 一套严格的首响应恢复格式：`task:`、`progress:`、`next step:`
+- 一套语言感知 + 固定三段式的恢复回复结构
+- 按优先级排序的中断任务、中文化恢复选项，以及用于扫读的分割线
 - Tier 1 官方 IM bridge 接入流程
 - Tier 3 MCP / skills catalog 引导
 - 自动化 smoke tests

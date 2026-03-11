@@ -83,6 +83,21 @@ cat >"$WORKSPACE/.assistant/WORKFLOW.md" <<EOF
 - Preferred workflow: $workflow_pref
 - Prefer incremental updates over full rewrites.
 - Check existing files before creating parallel structures.
+- Quick recall trigger phrases include: continue, resume, what were we doing, 刚才做到哪里了, 继续刚才的任务, 恢复一下.
+- Quick recall source priority: active-task.md first, then last-session.md, then any named resume checkpoints.
+- Quick recall speed rule: for the first recovery reply, check active-task.md first and avoid deep scanning unless the user asks for more context.
+- Quick recall language rule: prefer the user's default language for recovery replies unless the user explicitly switches language.
+- Quick recall protocol: when a trigger phrase appears, the first recovery reply should use exactly three sections in order: A. current main task, B. other interrupted tasks, C. recovery options.
+- Quick recall readability rule: insert a divider line `---` between sections A, B, and C.
+- Quick recall section A rule: the main task section must contain exactly three lines in this order: task: ..., progress: ..., next step: ....
+- Quick recall section B rule: if other interrupted tasks exist, list them in priority order, and for each task use the same structure: task: ..., priority: ..., progress: ..., next step: ....
+- Quick recall formatting rule: the first recovery reply must stay short, re-anchor context fast, and only then expand or execute.
+- Quick recall hard rule: do not start the first recovery reply with background explanation, file references, or secondary tasks.
+- Recovery follow-up rule: after the first compact recovery reply, insert one blank line, then optionally show the interrupted task list with pause time and priority order.
+- Recovery choice rule: when interrupted tasks exist, offer numbered choices so the user can continue the main task or switch directly to another paused task.
+- Recovery language rule: when the reply is in Chinese, localize the recovery options into Chinese as well.
+- Recovery formatting hard rule: do not use bullets or decorative prefixes before `task:`, `progress:`, or `next step:`.
+- Keep active-task and resumable checkpoints current during multi-step work so a new session can recover fast.
 EOF
 
 cat >"$WORKSPACE/.assistant/MEMORY.md" <<EOF
@@ -127,7 +142,70 @@ cat >"$WORKSPACE/.assistant/runtime/last-session.md" <<EOF
 # Last Session
 
 - Date: $(date '+%Y-%m-%d')
+- Task: Initial workspace memory bootstrap
+- Status: completed
+- Last completed step: Memory interview finished and base workspace scaffold created
+- Next step: Continue any pending IM / MCP / skills setup from unified bootstrap state
+- Blocking decision: none
 - Summary: Completed initial memory interview and created the workspace memory scaffold.
+EOF
+
+cat >"$WORKSPACE/.assistant/runtime/active-task.md" <<EOF
+# Active Task
+
+- Task: none
+- Status: idle
+- Last completed step: none
+- Next step: none
+- Blocking decision: none
+- Note: Update this file first when a live multi-step task starts or pauses.
+EOF
+
+cat >"$WORKSPACE/.assistant/runtime/interrupted-tasks.md" <<EOF
+# Interrupted Tasks
+
+Use this file to track paused tasks across sessions. Sort higher-priority items first.
+
+| Priority | Paused At | Task | Status | Next Step |
+|---|---|---|---|---|
+| P1 | $(date '+%Y-%m-%d %H:%M') | Initial workspace bootstrap follow-up | pending | Continue any pending IM / MCP / skills setup from unified bootstrap state |
+
+Preferred recovery options:
+- 1. 继续当前主任务
+- 2. 切换到最高优先级的中断任务
+- 3. 按编号切换到其他中断任务
+EOF
+
+cat >"$WORKSPACE/.assistant/runtime/resume-checkpoint-template.md" <<EOF
+# Resume Checkpoint Template
+
+- Task:
+- Paused at:
+- Priority:
+- Status:
+- Last completed step:
+- Next step:
+- Blocking decision:
+- Priority note: active-task.md should be checked before named checkpoints during resume.
+- Resume answer format:
+  A. Current main task
+  task: ...
+  progress: ...
+  next step: ...
+- Format hard rule:
+  section A must start directly with task/progress/next step lines and must not use bullets or decorative prefixes
+- Follow-up section:
+  B. Other interrupted tasks
+  task: ...
+  priority: P2
+  progress: ...
+  next step: ...
+- Choice section:
+  C. Recovery options
+  options:
+  1. 继续当前主任务
+  2. 切换到 [P2] ...
+  3. 切换到 [P3] ...
 EOF
 
 cat >"$WORKSPACE/.assistant/templates/README.md" <<EOF

@@ -1,5 +1,11 @@
 Welcome aboard. Your assistant stack is now structured for long-term memory, optional remote access, and tool expansion without collapsing into a monolith.
 
+For resume-style prompts such as "continue", "resume", or "what were we doing", the default workflow now expects a short recovery answer first: task, progress, next step.
+Recovery should prefer `.assistant/runtime/active-task.md` before `last-session.md` or other checkpoints.
+If helpful, a second section can list interrupted tasks with pause time and priority after the short recovery answer.
+When multiple paused tasks exist, the follow-up can offer numbered options for direct switching.
+The first recovery reply should start strictly with `task:`, then `progress:`, then `next step:`.
+
 You can continue with the pending items at any time by running:
 
   bin/cccg-companion reconfigure --workspace <target-workspace>

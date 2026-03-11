@@ -139,6 +139,14 @@ What is already in place:
 
 - state-aware install / continue / partial flows
 - a real memory interview that writes the workspace `.assistant/` scaffold
+- a structured last-session checkpoint plus quick recall workflow defaults for faster resume behavior
+- a reusable resume-checkpoint template for mid-task handoff and recovery
+- an `active-task.md` recovery anchor for live multi-step work
+- an `interrupted-tasks.md` backlog for paused-task priority ordering
+- numbered resume options so users can switch directly to another paused task
+- a strict first-reply recovery format: `task:`, `progress:`, `next step:`
+- language-aware recovery plus a fixed three-section resume reply
+- priority-sorted interrupted tasks, localized options, and divider lines for scanability
 - Tier 1 IM bridge integration with host-aware setup flow
 - Tier 3 catalog guidance for MCPs and skills
 - automated smoke tests
