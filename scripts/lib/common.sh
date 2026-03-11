@@ -3,6 +3,7 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 DEFAULT_WORKSPACE="$(pwd)"
+BRIDGE_FORCE_FRESH_CREDENTIALS="false"
 
 platform_global_dir() {
   case "$1" in
@@ -177,6 +178,31 @@ prompt_secret_default() {
     echo >&2
     printf '%s' "$result"
   fi
+}
+
+prompt_required_input() {
+  local label="$1"
+  local value=""
+  while [[ -z "$value" ]]; do
+    value="$(prompt_input "$label: ")"
+    if [[ -z "$value" ]]; then
+      echo "$label is required."
+    fi
+  done
+  printf '%s' "$value"
+}
+
+prompt_required_secret() {
+  local label="$1"
+  local result=""
+  while [[ -z "$result" ]]; do
+    read -r -s -p "$label: " result
+    echo >&2
+    if [[ -z "$result" ]]; then
+      echo "$label is required."
+    fi
+  done
+  printf '%s' "$result"
 }
 
 prompt_select() {
@@ -382,6 +408,22 @@ bridge_runtime_home() {
   printf '%s/.%s' "$HOME" "$(bridge_skill_name "$platform")"
 }
 
+bridge_runtime_owner_file() {
+  local platform="$1"
+  printf '%s/.runtime-owner' "$(bridge_runtime_home "$platform")"
+}
+
+sibling_bridge_runtime_paths() {
+  local platform="$1"
+  local other
+  for other in claude codex gemini; do
+    [[ "$other" == "$platform" ]] && continue
+    if [[ -f "$(bridge_config_file "$other")" ]]; then
+      printf '%s\n' "$(bridge_runtime_home "$other")"
+    fi
+  done
+}
+
 bridge_config_file() {
   local platform="$1"
   printf '%s/config.env' "$(bridge_runtime_home "$platform")"
@@ -417,7 +459,34 @@ bridge_clone_or_update() {
 ensure_bridge_runtime_home() {
   local platform="$1"
   mkdir -p "$(bridge_runtime_home "$platform")"
+  printf '%s\n' "$platform" >"$(bridge_runtime_owner_file "$platform")"
   IM_BRIDGE_RUNTIME_HOME="$(bridge_runtime_home "$platform")"
+}
+
+print_bridge_runtime_isolation_notice() {
+  local platform="$1"
+  print_header "Runtime isolation"
+  echo "Each host keeps an isolated IM runtime."
+  echo "Target host: $platform"
+  echo "Runtime home: $(bridge_runtime_home "$platform")"
+  echo "Config isolation rule: do not reuse credentials from other hosts such as ~/.claude-to-im, ~/.codex-to-im, or ~/.gemini-to-im."
+}
+
+handle_missing_target_config_with_sibling_runtimes() {
+  local platform="$1"
+  local sibling_paths=""
+  sibling_paths="$(sibling_bridge_runtime_paths "$platform")"
+  if [[ -n "$sibling_paths" ]]; then
+    print_header "Sibling runtime detected"
+    echo "Target host runtime is missing its own config.env:"
+    echo "  $(bridge_config_file "$platform")"
+    echo "Existing sibling runtimes were found:"
+    while IFS= read -r path; do
+      [[ -n "$path" ]] && echo "  $path"
+    done <<<"$sibling_paths"
+    echo "This installer will not import or reuse sibling *-to-im credentials."
+    echo "Please enter fresh credentials for the current host runtime."
+  fi
 }
 
 ensure_bridge_config_template() {
@@ -497,6 +566,7 @@ Provider: $provider
 Skill dir: $(bridge_skill_dir "$platform")
 Runtime home: $(bridge_runtime_home "$platform")
 Config file: $config_file
+Runtime isolation: this host keeps its own dedicated runtime home and config. Do not copy credentials from sibling *-to-im runtimes.
 
 Common commands:
 
@@ -542,23 +612,38 @@ configure_bridge_base() {
 configure_bridge_provider() {
   local platform="$1"
   local provider="$2"
-  local config_file existing
+  local config_file existing value
   config_file="$(bridge_config_file "$platform")"
 
   case "$provider" in
     telegram)
       upsert_env_file_value "$config_file" "CTI_ENABLED_CHANNELS" "telegram"
       existing="$(get_env_file_value "$config_file" "CTI_TG_BOT_TOKEN")"
-      upsert_env_file_value "$config_file" "CTI_TG_BOT_TOKEN" "$(prompt_secret_default "Telegram bot token" "$existing")"
+      if [[ "$BRIDGE_FORCE_FRESH_CREDENTIALS" == "true" ]]; then
+        value="$(prompt_required_secret "Telegram bot token")"
+      else
+        value="$(prompt_secret_default "Telegram bot token" "$existing")"
+      fi
+      upsert_env_file_value "$config_file" "CTI_TG_BOT_TOKEN" "$value"
       existing="$(get_env_file_value "$config_file" "CTI_TG_CHAT_ID")"
-      upsert_env_file_value "$config_file" "CTI_TG_CHAT_ID" "$(prompt_input_default "Telegram chat ID" "$existing")"
+      if [[ "$BRIDGE_FORCE_FRESH_CREDENTIALS" == "true" ]]; then
+        value="$(prompt_required_input "Telegram chat ID")"
+      else
+        value="$(prompt_input_default "Telegram chat ID" "$existing")"
+      fi
+      upsert_env_file_value "$config_file" "CTI_TG_CHAT_ID" "$value"
       existing="$(get_env_file_value "$config_file" "CTI_TG_ALLOWED_USERS")"
       upsert_env_file_value "$config_file" "CTI_TG_ALLOWED_USERS" "$(prompt_input_default "Telegram allowed user IDs (optional)" "$existing")"
       ;;
     discord)
       upsert_env_file_value "$config_file" "CTI_ENABLED_CHANNELS" "discord"
       existing="$(get_env_file_value "$config_file" "CTI_DISCORD_BOT_TOKEN")"
-      upsert_env_file_value "$config_file" "CTI_DISCORD_BOT_TOKEN" "$(prompt_secret_default "Discord bot token" "$existing")"
+      if [[ "$BRIDGE_FORCE_FRESH_CREDENTIALS" == "true" ]]; then
+        value="$(prompt_required_secret "Discord bot token")"
+      else
+        value="$(prompt_secret_default "Discord bot token" "$existing")"
+      fi
+      upsert_env_file_value "$config_file" "CTI_DISCORD_BOT_TOKEN" "$value"
       existing="$(get_env_file_value "$config_file" "CTI_DISCORD_ALLOWED_USERS")"
       upsert_env_file_value "$config_file" "CTI_DISCORD_ALLOWED_USERS" "$(prompt_input_default "Discord allowed user IDs (optional)" "$existing")"
       existing="$(get_env_file_value "$config_file" "CTI_DISCORD_ALLOWED_CHANNELS")"
@@ -569,9 +654,19 @@ configure_bridge_provider() {
     feishu)
       upsert_env_file_value "$config_file" "CTI_ENABLED_CHANNELS" "feishu"
       existing="$(get_env_file_value "$config_file" "CTI_FEISHU_APP_ID")"
-      upsert_env_file_value "$config_file" "CTI_FEISHU_APP_ID" "$(prompt_secret_default "Feishu/Lark app ID" "$existing")"
+      if [[ "$BRIDGE_FORCE_FRESH_CREDENTIALS" == "true" ]]; then
+        value="$(prompt_required_secret "Feishu/Lark app ID")"
+      else
+        value="$(prompt_secret_default "Feishu/Lark app ID" "$existing")"
+      fi
+      upsert_env_file_value "$config_file" "CTI_FEISHU_APP_ID" "$value"
       existing="$(get_env_file_value "$config_file" "CTI_FEISHU_APP_SECRET")"
-      upsert_env_file_value "$config_file" "CTI_FEISHU_APP_SECRET" "$(prompt_secret_default "Feishu/Lark app secret" "$existing")"
+      if [[ "$BRIDGE_FORCE_FRESH_CREDENTIALS" == "true" ]]; then
+        value="$(prompt_required_secret "Feishu/Lark app secret")"
+      else
+        value="$(prompt_secret_default "Feishu/Lark app secret" "$existing")"
+      fi
+      upsert_env_file_value "$config_file" "CTI_FEISHU_APP_SECRET" "$value"
       existing="$(get_env_file_value "$config_file" "CTI_FEISHU_DOMAIN")"
       if [[ -z "$existing" ]]; then
         existing="https://open.feishu.cn"

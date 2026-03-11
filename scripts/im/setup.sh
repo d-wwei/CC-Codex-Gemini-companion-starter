@@ -60,10 +60,23 @@ print_header "IM bridge"
 echo "Repository: $IM_BRIDGE_REPO"
 echo "Platform host: $PLATFORM_ARG"
 echo "Provider: $PROVIDER_ARG"
+print_bridge_runtime_isolation_notice "$PLATFORM_ARG"
+
+TARGET_CONFIG_FILE="$(bridge_config_file "$PLATFORM_ARG")"
+TARGET_CONFIG_MISSING="false"
+if [[ ! -f "$TARGET_CONFIG_FILE" ]]; then
+  TARGET_CONFIG_MISSING="true"
+fi
 
 bridge_clone_or_update "$WORKSPACE"
 bridge_install_for_platform "$WORKSPACE" "$PLATFORM_ARG"
 ensure_bridge_config_template "$WORKSPACE" "$PLATFORM_ARG"
+if [[ "$TARGET_CONFIG_MISSING" == "true" ]]; then
+  handle_missing_target_config_with_sibling_runtimes "$PLATFORM_ARG"
+  BRIDGE_FORCE_FRESH_CREDENTIALS="true"
+else
+  BRIDGE_FORCE_FRESH_CREDENTIALS="false"
+fi
 configure_bridge_base "$PLATFORM_ARG" "$WORKSPACE"
 
 case "$PROVIDER_ARG" in

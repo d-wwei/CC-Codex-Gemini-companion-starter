@@ -67,6 +67,12 @@ With thanks to the upstream open source bridge work:
 
 - [`op7418/Claude-to-IM-skill`](https://github.com/op7418/Claude-to-IM-skill)
 
+Important runtime rule:
+
+- `claude-to-im`, `codex-to-im`, and `gemini-to-im` must be treated as isolated runtimes
+- each host keeps its own `~/.<host>-to-im/` home, config, logs, and credentials
+- do not copy or reuse another host's `config.env` as the starting point
+
 ### 3. Tooling Layer
 
 One major OpenClaw advantage is that it feels like it ships with an assistant-shaped tool layer out of the box.

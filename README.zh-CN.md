@@ -75,6 +75,12 @@ Claude Code / Codex / Gemini 这类宿主本身都很强，但默认仍然更像
 
 - [`op7418/Claude-to-IM-skill`](https://github.com/op7418/Claude-to-IM-skill)
 
+重要运行规则：
+
+- `claude-to-im`、`codex-to-im`、`gemini-to-im` 必须被当作彼此隔离的 runtime
+- 每个宿主都应维护自己的 `~/.<host>-to-im/` 目录、配置、日志和凭据
+- 不要把另一个宿主的 `config.env` 复制过来当作初始配置
+
 ### 3. 工具能力补齐
 
 OpenClaw 一个很大的优势，是装上就自带一整套围绕“助理”组织起来的工具层。
