@@ -45,8 +45,8 @@ fi
 
 project_name="$(prompt_input_default "Project name" "$(basename "$WORKSPACE")")"
 project_focus="$(prompt_input_default "Project focus / description" "Personal assistant enhancement workspace")"
-preferred_name="$(prompt_input_default "User preferred name" "eli")"
-primary_language="$(prompt_input_default "Primary language" "Chinese")"
+preferred_name="$(prompt_input_default "User preferred name" "${USER:-$(whoami)}")"
+primary_language="$(prompt_input_default "Primary language" "English")"
 assistant_role="$(prompt_input_default "Assistant role in this workspace" "the user's assistant")"
 answer_style="$(prompt_input_default "Answer style" "conclusion first, concise, execution-first")"
 workflow_pref="$(prompt_input_default "Preferred workflow" "inspect first, then edit, then summarize verification")"
