@@ -15,8 +15,8 @@ install_log="$tmp_root/install.log"
 cat <<'EOF' | HOME="$home_dir" "$ROOT_DIR/bin/cccg-companion" install --workspace "$workspace" --platform codex --mode fresh --accept-disclaimer >"$install_log" 2>&1
 Smoke Project
 Install flow smoke test
-eli
-Chinese
+testuser
+English
 assistant
 conclusion first
 inspect then edit

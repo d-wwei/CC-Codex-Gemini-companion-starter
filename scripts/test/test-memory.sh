@@ -9,7 +9,7 @@ tmp_root="$(new_tmp_root memory)"
 workspace="$tmp_root/workspace"
 mkdir -p "$workspace"
 
-printf 'Smoke Project\nMemory smoke test\neli\nChinese\nassistant\nconclusion first\ninspect then edit\npromote confirmed prefs only\n' \
+printf 'Smoke Project\nMemory smoke test\ntestuser\nEnglish\nassistant\nconclusion first\ninspect then edit\npromote confirmed prefs only\n' \
   | "$ROOT_DIR/scripts/memory/interview.sh" --workspace "$workspace" --platform codex >/tmp/cccg-memory.out 2>&1
 
 assert_file_exists "$workspace/.assistant/SYSTEM.md"
@@ -20,7 +20,7 @@ assert_file_exists "$workspace/.assistant/runtime/interrupted-tasks.md"
 assert_file_exists "$workspace/.assistant/runtime/last-session.md"
 assert_file_exists "$workspace/.assistant/runtime/resume-checkpoint-template.md"
 assert_contains "$workspace/.assistant/SYSTEM.md" "Project: Smoke Project"
-assert_contains "$workspace/.assistant/USER.md" "Preferred name: eli"
+assert_contains "$workspace/.assistant/USER.md" "Preferred name: testuser"
 assert_contains "$workspace/.assistant/WORKFLOW.md" "Preferred workflow: inspect then edit"
 assert_contains "$workspace/.assistant/WORKFLOW.md" "Quick recall protocol:"
 assert_contains "$workspace/.assistant/WORKFLOW.md" "Quick recall trigger phrases include:"
